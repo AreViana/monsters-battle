@@ -9,8 +9,8 @@ const upload = multer({ dest: 'upload' });
 router.get('/', tryCatch(MonsterController.list));
 router.post('/', tryCatch(MonsterController.create));
 router.post('/import', upload.single('monsters'), MonsterController.importCsv);
-router.get('/:id', MonsterController.get);
-router.put('/:id', MonsterController.update);
-router.delete('/:id', MonsterController.remove);
+router.get('/:id', tryCatch(MonsterController.get));
+router.put('/:id', tryCatch(MonsterController.update));
+router.delete('/:id', tryCatch(MonsterController.remove));
 
 export default router;
