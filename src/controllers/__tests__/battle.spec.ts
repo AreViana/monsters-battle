@@ -45,7 +45,7 @@ describe('BattleController', () => {
         .post('/battle')
         .send({ monsterA: 3, monsterB: 2 });
       expect(response.status).toBe(StatusCodes.CREATED);
-      expect(response.body.data.winner).toBe(3);
+      expect(response.body.winner).toBe(3);
     });
 
     test('should insert a battle of monsters successfully with monster 2 winning', async () => {
@@ -53,7 +53,7 @@ describe('BattleController', () => {
         .post('/battle')
         .send({ monsterA: 1, monsterB: 5 });
       expect(response.status).toBe(StatusCodes.CREATED);
-      expect(response.body.data.winner).toBe(5);
+      expect(response.body.winner).toBe(5);
     });
   });
 

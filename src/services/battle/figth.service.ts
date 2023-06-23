@@ -18,7 +18,7 @@ const create = async (monsterAId: Id, monsterBId: Id) => {
     .throwIfNotFound({ message: `Monster with id=${monsterBId} not found` });
 
   const result = figth(monsterA, monsterB);
-  const battle = await Battle.query().insert(result);
+  const battle = await Battle.query().insert(result).withGraphFetched('winnerRelation');
   return battle;
 };
 
