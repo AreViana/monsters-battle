@@ -54,10 +54,16 @@ export const importCsv = async (
   return res.sendStatus(StatusCodes.CREATED);
 };
 
+export const list = async (req: Request, res: Response): Promise<Response> => {
+  const monsters = await Monster.query();
+  return res.status(StatusCodes.OK).json(monsters);
+};
+
 export const MonsterController = {
   get,
   create,
   update,
   remove,
   importCsv,
+  list,
 };
