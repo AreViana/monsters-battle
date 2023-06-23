@@ -48,6 +48,13 @@ describe('MonsterController', () => {
       expect(response.status).toBe(StatusCodes.CREATED);
       expect(response.body.name).toBe(monster.name);
     });
+
+    test('should fail with incomplete monster information', async () => {
+      const monster = { name: 'Monster test 1' };
+      const response = await request(server).post(`/monsters`).send(monster);
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+      expect(response.body.message).toBe('Missing required data');
+    });
   });
 
   describe('Update', () => {
@@ -91,16 +98,29 @@ describe('MonsterController', () => {
   });
 
   describe('Import CSV', () => {
-    test('should fail when importing csv file with an empty monster', () => {
-      // @TODO
+    test('should fail when importing csv file with an empty monster', async () => {
+      const response = await request(server)
+        .post(`/monsters/import`)
+        .attach('monsters', 'data/monsters-empty-monster.csv');
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+      expect(response.body.message).toBe('Wrong data mapping.');
     });
 
-    test('should fail when importing csv file with wrong or inexistent columns.', () => {
-      // @TODO
+    test('should fail when importing csv file with wrong or inexistent columns.', async () => {
+      const response = await request(server)
+        .post(`/monsters/import`)
+        .attach('monsters', 'data/monsters-wrong-column.csv');
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+      expect(response.body.message).toBe('Wrong data mapping.');
     });
 
-    test('should import all the CSV objects into the database successfully', () => {
-      // @TODO
+    test('should import all the CSV objects into the database successfully', async () => {
+      const totalMonsters = await Monster.query().resultSize();
+      const response = await request(server)
+        .post(`/monsters/import`)
+        .attach('monsters', 'data/monsters-correct.csv');
+      expect(response.status).toBe(StatusCodes.CREATED);
+      expect(await Monster.query().resultSize()).toBe(totalMonsters + 11);
     });
   });
 });
