@@ -7,7 +7,10 @@ import { readFileSync } from 'fs';
 
 export const get = async (req: Request, res: Response): Promise<Response> => {
   const id: Id = req.params.id;
-  const monster = await Monster.query().findById(id);
+  const monster = await Monster.query()
+    .findById(id)
+    .withGraphFetched('battles')
+    .throwIfNotFound({ message: `Monster with id=${id} not found` });
   return res.status(StatusCodes.OK).json(monster);
 };
 
@@ -24,7 +27,10 @@ export const update = async (
   res: Response
 ): Promise<Response> => {
   const id: Id = req.params.id;
-  await Monster.query().findById(id).patch(req.body);
+  await Monster.query()
+    .findById(id)
+    .throwIfNotFound({ message: `Monster with id=${id} not found` })
+    .patch(req.body);
   return res.sendStatus(StatusCodes.OK);
 };
 
@@ -33,7 +39,9 @@ export const remove = async (
   res: Response
 ): Promise<Response> => {
   const id: Id = req.params.id;
-  await Monster.query().deleteById(id);
+  await Monster.query()
+    .deleteById(id)
+    .throwIfNotFound({ message: `Monster with id=${id} not found` });
   return res.sendStatus(StatusCodes.NO_CONTENT);
 };
 
