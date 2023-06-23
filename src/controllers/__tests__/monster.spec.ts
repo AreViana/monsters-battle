@@ -48,6 +48,13 @@ describe('MonsterController', () => {
       expect(response.status).toBe(StatusCodes.CREATED);
       expect(response.body.name).toBe(monster.name);
     });
+
+    test('should fail with incomplete monster information', async () => {
+      const monster = { name: 'Monster test 1' };
+      const response = await request(server).post(`/monsters`).send(monster);
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST);
+      expect(response.body.message).toBe('Missing required data');
+    });
   });
 
   describe('Update', () => {
