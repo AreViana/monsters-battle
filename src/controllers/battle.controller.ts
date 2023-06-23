@@ -14,7 +14,7 @@ const list = async (_req: Request, res: Response): Promise<Response> => {
 const create = async (req: Request, res: Response): Promise<Response> => {
   const { monsterA, monsterB } = req.body;
   const battle = await FigthService.create(monsterA, monsterB);
-  return res.status(StatusCodes.CREATED).json({ data: battle });
+  return res.status(StatusCodes.CREATED).json(battle);
 };
 
 const remove = async (req: Request, res: Response): Promise<Response> => {
